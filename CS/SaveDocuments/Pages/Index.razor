@@ -1,0 +1,54 @@
+﻿@page "/"
+
+<DxRichEdit @ref="richEdit" 
+            DocumentFormat="DocumentFormat.Rtf"
+            DocumentContent=@documentContent 
+            DocumentContentChanging="OnDocumentContentChanging"
+            DocumentContentChanged="OnDocumentContentChanged"            
+            />
+
+@code{
+    DxRichEdit richEdit;
+    byte[] documentContent;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (firstRender)
+            try {
+                await InitializeDocument();
+            }
+            catch (TaskCanceledException) { }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+
+    async Task InitializeDocument() {
+        richEdit.DocumentAPI.BeginUpdate();
+        await richEdit.LoadDocumentAsync("Data\\document.rtf");
+        richEdit.DocumentAPI.EndUpdate();
+    }
+
+    async Task OnDocumentContentChanging() {
+        richEdit.DocumentAPI.BeginUpdate();
+        await richEdit.DocumentAPI.Fields.UpdateAllAsync(true);
+        await InsertLogoAsync();
+        richEdit.DocumentAPI.EndUpdate();
+    }
+
+    async Task OnDocumentContentChanged(byte[] content) {
+        documentContent = content;
+        await richEdit.ExportDocumentAsync("Data\\document.rtf", DocumentFormat.Rtf);
+    }
+
+    async Task InsertLogoAsync() {
+        Section section = await richEdit.DocumentAPI.Sections.GetAsync(0);
+        SubDocument header = await section.GetHeaderAsync(createIfNotExist: true);
+        await header.RemoveAsync(await header.GetIntervalAsync());
+        using (FileStream sourceStream = File.Open("Data\\logo.png", FileMode.Open)) {
+            DocumentImageSource imgSource = DocumentImageSource.LoadFromStream(sourceStream, UnitConverter.PixelsToTwips(160), UnitConverter.PixelsToTwips(30));
+            Image image = await header.Images.CreateAsync(0, imgSource);
+            await image.ChangePropertiesAsync(ip => {
+                ip.VerticalAnchorElement = FloatingObjectVerticalAnchorElement.TopMargin;
+                ip.VerticalAlignment = FloatingObjectVerticalAlignment.Center;
+            });
+        }       
+    }
+}
