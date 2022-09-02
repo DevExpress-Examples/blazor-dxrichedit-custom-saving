@@ -4,25 +4,18 @@
 <!-- default badges end -->
 # Rich Edit for Blazor - How to implement custom saving
 
-The [Rich Text Editor](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit) component allows you to implement custom saving. In this example, the component performs the following actions when a user saves an open document:
+The [Rich Text Editor](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit) allows you to customize its built-in UI. In this example, the Rich Text Editor displays the custom **Final Save** button in the **File** ribbon tab. When a user clicks this button, the control performs the following actions:
 
-1. Updates [fields](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.Field#remarks) in the document.
+1. Updates [fields](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.Field#remarks) in an open document.
 2. Clears the content of the first section's [header](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.Section#section-headers-and-footers).
 3. Inserts an [image](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.Image#remarks) to the header.
+4. [Saves](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.SaveDocumentAsync(System.Threading.CancellationToken)) the open document.
 
-![Blazor Rich Edit implement custom saving](images/custom-saving.png)
+![Blazor Rich Edit implement custom saving](images/custom-saving.gif)
 
-The [DocumentContent](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContent) property specifies an open document's content. The Rich Text Editor updates this property value and raises the [DocumentContentChanging](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContentChanging) and then the [DocumentContentChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContentChanged) events in the following cases:
+Handle the [CustomizeRibbon](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.CustomizeRibbon) event to customize the built-in ribbon. Use the event's parameter to access the **File** tab's **Common** item group. Call the group's [AddCustomButton](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.BarItemCollection.AddCustomButton(System.Int32-System.String-System.Func-System.Threading.Tasks.Task-)) method to add the custom **Final Save** button to this group. The method's `click` parameter sets this button's [Click](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.IBarButton.Click) event handler.
 
-* A user selects the **File** → **Save** ribbon command.
-
-* A user presses **CTRL+S**.
-
-* You call the [SaveDocumentAsync](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.SaveDocumentAsync(System.Threading.CancellationToken)) method.
-
-* An [auto-save timeout](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.AutoSaveTimeout) expires.
-
-The [DocumentContentChanging](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContentChanging) event allows you to edit an open document before saving. Handle the [DocumentContentChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContentChanged) event to save the document, overwise the component disables save operations and hides the **File** → **Save** ribbon command.
+Bind the [DocumentContent](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContent) property to a data field to enable save operations. Use the [Modified](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.Modified) property to check whether an open document has unsaved changes and depending on this [enable/disable](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.IBarItem.GetEnabled) the **Final Save** button.
 
 ## Files to Look At
 
@@ -30,7 +23,8 @@ The [DocumentContentChanging](https://docs.devexpress.com/Blazor/DevExpress.Blaz
 
 ## Documentation
 
-- [Document Management in the Rich Text Editor](https://docs.devexpress.com/Blazor/403344/rich-edit/document-management)
+- [UI Customizatiom](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit#ui-customization)
+- [Document Management](https://docs.devexpress.com/Blazor/403344/rich-edit/document-management)
 - [Rich Text Editor Examples](https://docs.devexpress.com/Blazor/403343/rich-edit/examples)
 
 ## More Examples
