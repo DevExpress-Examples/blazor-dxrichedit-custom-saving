@@ -4,7 +4,7 @@
 <!-- default badges end -->
 # Rich Edit for Blazor - How to implement custom saving
 
-The [Rich Text Editor](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit) allows you to customize its built-in UI. In this example, the Rich Text Editor displays the custom **Final Save** button in the **File** ribbon tab. When a user clicks this button, the control performs the following actions:
+This example adds a custom **Final Save** button to the [Rich Text Editor](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit)'s **File** tab. When a user clicks this button, the control performs the following actions:
 
 1. Updates [fields](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.Field#remarks) in an open document.
 2. Clears the content of the first section's [header](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.Section#section-headers-and-footers).
