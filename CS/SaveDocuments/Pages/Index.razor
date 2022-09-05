@@ -2,53 +2,50 @@
 
 <DxRichEdit @ref="richEdit" 
             DocumentFormat="DocumentFormat.Rtf"
-            DocumentContent=@documentContent 
-            DocumentContentChanging="OnDocumentContentChanging"
-            DocumentContentChanged="OnDocumentContentChanged"            
+            @bind-DocumentContent=@documentContent
+            CustomizeRibbon=OnCustomizeRibbon
+            @bind-Modified=modified
             />
 
 @code{
     DxRichEdit richEdit;
     byte[] documentContent;
+    bool modified = false;
 
-    protected override async Task OnAfterRenderAsync(bool firstRender) {
-        if (firstRender)
-            try {
-                await InitializeDocument();
-            }
-            catch (TaskCanceledException) { }
-        await base.OnAfterRenderAsync(firstRender);
+    protected override async Task OnInitializedAsync() {
+        documentContent = await File.ReadAllBytesAsync("Data\\document.rtf");
+        await base.OnInitializedAsync();    
     }
 
-    async Task InitializeDocument() {
-        richEdit.DocumentAPI.BeginUpdate();
-        await richEdit.LoadDocumentAsync("Data\\document.rtf");
-        richEdit.DocumentAPI.EndUpdate();
-    }
-
-    async Task OnDocumentContentChanging() {
+    async Task FinalSaveAsync() {
         richEdit.DocumentAPI.BeginUpdate();
         await richEdit.DocumentAPI.Fields.UpdateAllAsync(true);
         await InsertLogoAsync();
+        await richEdit.SaveDocumentAsync();
+        await richEdit.ExportDocumentAsync("Data\\document.rtf", DocumentFormat.Rtf);
         richEdit.DocumentAPI.EndUpdate();
     }
 
-    async Task OnDocumentContentChanged(byte[] content) {
-        documentContent = content;
-        await richEdit.ExportDocumentAsync("Data\\document.rtf", DocumentFormat.Rtf);
+    async Task OnCustomizeRibbon(IRibbon ribbon) {
+        IRibbonTab fileTab = ribbon.Tabs[RichEditRibbonTabNames.File];
+        IBarGroup commonGroup = fileTab.Groups[RichEditRibbonGroupNames.FileCommon];
+        commonGroup.Items.Remove(RichEditBarItemNames.SaveDocument);
+        IBarButton customSaveButton = commonGroup.Items.AddCustomButton(4, "Final Save", FinalSaveAsync);
+        customSaveButton.IconUrl = "/images/Save.svg";
+        customSaveButton.GetEnabled = () => modified == true;
     }
 
     async Task InsertLogoAsync() {
         Section section = await richEdit.DocumentAPI.Sections.GetAsync(0);
         SubDocument header = await section.GetHeaderAsync(createIfNotExist: true);
         await header.RemoveAsync(await header.GetIntervalAsync());
-        using (FileStream sourceStream = File.Open("Data\\logo.png", FileMode.Open)) {
+        using (FileStream sourceStream = File.Open("Data\\logo.png", FileMode.Open)){
             DocumentImageSource imgSource = DocumentImageSource.LoadFromStream(sourceStream, UnitConverter.PixelsToTwips(160), UnitConverter.PixelsToTwips(30));
             Image image = await header.Images.CreateAsync(0, imgSource);
             await image.ChangePropertiesAsync(ip => {
                 ip.VerticalAnchorElement = FloatingObjectVerticalAnchorElement.TopMargin;
                 ip.VerticalAlignment = FloatingObjectVerticalAlignment.Center;
             });
-        }       
+        }      
     }
 }
