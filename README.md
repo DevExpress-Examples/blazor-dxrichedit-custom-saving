@@ -13,9 +13,16 @@ This example adds a custom **Final Save** button to the [Rich Text Editor](https
 
 ![Blazor Rich Edit implement custom saving](images/custom-saving.gif)
 
-Handle the [CustomizeRibbon](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.CustomizeRibbon) event to customize the built-in ribbon. Use the event's parameter to access the **File** tab's **Common** item group. Call the group's [AddCustomButton](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.BarItemCollection.AddCustomButton(System.Int32-System.String-System.Func-System.Threading.Tasks.Task-)) method to add the custom **Final Save** button to this group. The method's `click` parameter sets this button's [Click](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.IBarButton.Click) event handler.
+## Overview
 
-Bind the [DocumentContent](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContent) property to a data field to enable save operations. Use the [Modified](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.Modified) property to check whether an open document has unsaved changes and depending on this [enable/disable](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.IBarItem.GetEnabled) the **Final Save** button.
+The [CustomizeRibbon](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.CustomizeRibbon) event allows you to access and customize the built-in ribbon UI. Call the [AddCustomButton](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.BarItemCollection.AddCustomButton(System.Int32-System.String-System.Func-System.Threading.Tasks.Task-)) in the event handler to add a custom button to the ribbon. The method's `click` parameter sets this button's [Click](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.IBarButton.Click) event handler.
+
+Do one of the following to enable save operations in the Rich Text Editor:
+
+* Handle the [DocumentContentChanged](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContentChanged) event.
+* Implement [two-way data binding](https://docs.devexpress.com/Blazor/402330/common-concepts/two-way-data-binding) between the [DocumentContent](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.DocumentContent) property and a data field. 
+
+Call the [SaveDocumentAsync](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.SaveDocumentAsync(System.Threading.CancellationToken)) method in the custom button's click event handler to save changes. Use the [Modified](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit.DxRichEdit.Modified) property to check whether an open document has unsaved changes. Depending on this, [enable or disable](https://docs.devexpress.com/Blazor/DevExpress.Blazor.Office.IBarItem.GetEnabled) the custom button.
 
 ## Files to Look At
 
