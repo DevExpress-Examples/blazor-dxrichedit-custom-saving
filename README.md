@@ -37,5 +37,4 @@ Use the [Modified](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit
 
 ## More Examples
 
-- [Blazor Rich Text Editor - How to determine whether a document is empty](https://github.com/DevExpress-Examples/blazor-dxrichedit-check-if-document-is-empty)
 - [Blazor Rich Text Editor - How to export a document to a file (HTML format)](https://github.com/DevExpress-Examples/blazor-dxrichedit-export-to-html)
