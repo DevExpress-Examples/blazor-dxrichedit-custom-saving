@@ -1,5 +1,13 @@
 ﻿@page "/"
 
+<style>
+    .my-icon{
+        height: 16px;
+        width: 16px;
+        background-image: url("/images/Save.svg");
+    }
+</style>
+
 <DxRichEdit @ref="richEdit" 
             DocumentFormat="DocumentFormat.Rtf"
             @bind-DocumentContent=@documentContent
@@ -31,7 +39,7 @@
         IBarGroup commonGroup = fileTab.Groups[RichEditRibbonGroupNames.FileCommon];
         commonGroup.Items.Remove(RichEditBarItemNames.SaveDocument);
         IBarButton customSaveButton = commonGroup.Items.AddCustomButton(4, "Final Save", FinalSaveAsync);
-        customSaveButton.IconUrl = "/images/Save.svg";
+        customSaveButton.IconCssClass = "my-icon";
         customSaveButton.GetEnabled = () => modified == true;
     }
 
