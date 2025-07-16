@@ -38,7 +38,7 @@ Use the [Modified](https://docs.devexpress.com/Blazor/DevExpress.Blazor.RichEdit
 
 ## More Examples
 
-- [Blazor Rich Text Editor - How to export a document to a file (HTML format)](https://github.com/DevExpress-Examples/blazor-dxrichedit-export-to-html)
+- [Blazor Rich Text Editor - How to export a document to a file (DOC format)](https://github.com/DevExpress-Examples/blazor-dxrichedit-export-to-doc)
 <!-- feedback -->
 ## Does this example address your development requirements/objectives?
 
